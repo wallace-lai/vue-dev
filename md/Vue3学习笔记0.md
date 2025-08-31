@@ -99,7 +99,7 @@ C:\Windows\system32>
 
 （2）使用Vue CLI的方式安装Vue 3
 
-- 使用npm安装Vue CLI
+- 使用npm（全局）安装Vue CLI
 
 ```
 npm install -g @vue/cli
@@ -109,6 +109,13 @@ npm install -g @vue/cli
 
 ```
 vue create my-vue3-app
+```
+
+- 启动项目
+
+```
+cd my-vue3-app
+npm run serve
 ```
 
 # Vue项目结构

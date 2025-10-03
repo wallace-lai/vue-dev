@@ -201,4 +201,159 @@ export default {
 </script>
 ```
 
+# 侦听器
+
+我们可以使用`watch`选项在每次响应式属性发生变化时触发一个函数。
+
+注意：触发函数必须和被监听的对象同名
+
+```html
+<template>
+  <h3>侦听器</h3>
+  <p>{{ message }}</p>
+  <button @click="updateHandler">修改数据</button>
+</template>
+
+<script>
+export default {
+  data() {
+    return {
+      // message为响应式数据，数据改变页面内容会同步发生改变
+      // 侦听器监测的就是这类响应式数据
+      message: "hello"
+    }
+  },
+  methods: {
+    // 点击按钮修改数据的这个变化过程是可以被监听的
+    updateHandler() {
+      this.message = 'world'
+    }
+  },
+  watch: {
+    // 使用watch选项监听message的变化，函数名与要监听的对象名同名
+    message(newValue, oldValue) {
+      console.log(newValue, oldValue);
+    }
+  }
+}
+</script>
+```
+
+# 表达输入绑定
+
+在前端处理表单时，我们常常需要将表单输入框的内容同步给JavaScript中相应的变量。手动连接值绑定和更改事件监听器可能会很麻烦，`v-model`指令帮我们简化了这一步骤。
+
+## 1. 绑定输入框
+```html
+<template>
+  <h3>表单输入绑定</h3>
+  <form>
+    <input type="text" v-model="message">
+    <p>{{ message }}</p>
+  </form>
+</template>
+
+<script>
+export default {
+  data() {
+    return {
+      message: ""
+    }
+  }
+}
+</script>
+```
+
+## 2. 绑定复选框
+
+```html
+<template>
+  <h3>表单输入绑定</h3>
+  <form>
+    <input type="checkbox" v-model="checked">
+    <label for="checkbox">{{ checked }}</label>
+  </form>
+</template>
+
+<script>
+export default {
+  data() {
+    return {
+      checked: true
+    }
+  }
+}
+</script>
+```
+
+## 3. 修饰符
+
+- `.lazy`
+
+默认情况下，`v-model`会在每次`input`事件后更新数据，你可以添加`.lazy`修饰符来改为在每次`change`事件后更新数据。
+
+```html
+<template>
+  <h3>表单输入绑定</h3>
+  <form>
+    <input type="text" v-model.lazy="message">
+    <p>{{ message }}</p>
+  </form>
+</template>
+
+<script>
+export default {
+  data() {
+    return {
+      message: ""
+    }
+  }
+}
+</script>
+```
+
+- `.number`：只接收输入的数字
+
+
+- `.trim`：去掉输入前后的空格
+
+# 模板引用
+
+虽然Vue的声明式渲染模型为你抽象了大部分对DOM的直接操作，但在某些情况下，我们仍然需要直接访问底层DOM元素。要实现这一点，我们可以使用特殊的`ref`属性。
+
+挂载结束后引用都会被暴露在`this.$refs`之上。这里的模板引用指的是在Vue中直接读取DOM元素。
+
+```html
+<template>
+  <div ref="container" class="container">{{content}}</div>
+  <button @click="getElementHandle">获取元素</button>
+</template>
+
+<script>
+/**
+ * 改变DOM的几种情况：
+ * （1）内容改变，使用：{{模板语法}}
+ * （2）属性改变，使用：v-bind: 指令
+ * （3）事件改变，使用：v-on:click 指令
+ * （4）直接操作DOM，使用ref属性
+ * 
+ * 如果没有特殊要求，不要直接操作DOM
+ */
+export default {
+  data() {
+    return {
+      content: "内容"
+    }
+  },
+  methods: {
+    getElementHandle() {
+      // 直接读取container这个div
+      // innerHTML是原生JS的属性
+      console.log(this.$refs.container.innerHTML = "哈哈哈")
+    }
+  }
+}
+</script>
+```
+
 
